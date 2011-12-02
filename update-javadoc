@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Env vars:
-#  FORCE_CLEAN_UPDATE to force update to use -C
 #  SYNC_ONLY to only sync
 #  NO_SYNC to not do the sync
 
