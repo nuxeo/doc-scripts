@@ -32,19 +32,6 @@ clone() {
 
 }
 
-add_addons_as_nuxeo_module() {
-
-    cp $LOCAL_REPO/pom.xml $LOCAL_REPO/pom.real
-    perl -p -i -e "s,</modules>,  <module>addons</module>\n  </modules>," $LOCAL_REPO/pom.xml
-
-}
-
-remove_addons_as_nuxeo_module() {
-
-    mv -f $LOCAL_REPO/pom.real $LOCAL_REPO/pom.xml
-
-}
-
 keep_old_javadoc() {
     # Keep old files if unchanged, to help caches and crawlers
     OLD="$1"
@@ -67,7 +54,7 @@ build_javadoc() {
     DOCTMP="$1"/target/site/apidocs
     DOCDST="$2"
     cd "$1"
-    mvn -Pjavadoc javadoc:aggregate || return 1
+    mvn javadoc:aggregate -Pjavadoc,addons,distrib || return 1
     [ ! -d "$DOCTMP" ] && return
     keep_old_javadoc "$DOCDST" "$DOCTMP"
     swap_doc "$DOCDST" "$DOCTMP"
@@ -111,12 +98,10 @@ update() {
         [ -z "$LOCAL_TLDDOC" ] || push_doc "$LOCAL_TLDDOC" nuxeo/$VERSION/tlddoc
     else
         clone
-        add_addons_as_nuxeo_module
         build_javadoc "$LOCAL_REPO" "$LOCAL_DOC" && push_doc "$LOCAL_DOC" nuxeo/$VERSION/javadoc
         [ -z "$LOCAL_TLDDOC" ] || \
             (build_tlddoc "$LOCAL_REPO" "$LOCAL_TLDDOC" && \
              push_doc "$LOCAL_TLDDOC" nuxeo/$VERSION/tlddoc)
-        remove_addons_as_nuxeo_module
     fi
     echo "######## nuxeo-$VERSION end"
 }
