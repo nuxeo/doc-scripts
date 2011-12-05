@@ -106,7 +106,6 @@ build_tlddoc() {
 
 update() {
     echo "######## nuxeo-$VERSION start generating doc"
-    NO_SYNC="y"
     if [ -n "$SYNC_ONLY" ]; then
         push_doc "$LOCAL_DOC" nuxeo/$VERSION/javadoc
         [ -z "$LOCAL_TLDDOC" ] || push_doc "$LOCAL_TLDDOC" nuxeo/$VERSION/tlddoc
