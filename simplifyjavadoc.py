@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # Strips cruft from a Javadoc file and keeps only the type doc
-# Works with Javadoc up to Java 6
+# Works with Javadoc up to Java 6 and also Java 7
 #
 # Copyright (c) 2011-2012 Nuxeo SA (http://nuxeo.com/)
 # Licensed under the Apache License, Version 2.0
@@ -21,7 +21,12 @@ def gen(filename):
         if step == 1:
             if line == '<HR>':
               step = 2
-            continue
+              continue
+            elif line.startswith('<div class="block">'):
+              step = 3
+              # fall through
+            else:
+              continue
         if step == 2:
             if line == '</PRE>':
               step = 3
@@ -29,17 +34,20 @@ def gen(filename):
 
         if line.endswith('>Serialized Form</A></DL>'):
             line = '</DL>'
-        elif line.startswith('<DT><B>See Also:</B>'):
-            continue
+        elif (line.startswith('<DT><B>See Also:</B>') or
+              line.startswith('<dt><span class="strong">See Also:</span>')):
+            break # stop after See Also (may be multi-line)
 
-        if line == '<DT><B>Author:</B></DT>':
+        if (line == '<DT><B>Author:</B></DT>' or
+            line == '<dl><dt><span class="strong">Author:</span></dt>'):
             step = 4
             continue
         if step == 4:
             step = 3 # skip author
             continue
         
-        if line == '<HR>':
+        if (line == '<HR>' or
+            line == '<div class="summary">'):
             break
 
         lines.append(line)
