@@ -25,6 +25,9 @@ def gen(filename):
             elif line.startswith('<div class="block">'):
               step = 3
               # fall through
+            elif line == '<div class="summary">':
+              # no type data
+              break
             else:
               continue
         if step == 2:
@@ -40,11 +43,7 @@ def gen(filename):
 
         if (line == '<DT><B>Author:</B></DT>' or
             line == '<dl><dt><span class="strong">Author:</span></dt>'):
-            step = 4
-            continue
-        if step == 4:
-            step = 3 # skip author
-            continue
+            break # stop after Author
         
         if (line == '<HR>' or
             line == '<div class="summary">'):
