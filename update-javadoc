@@ -9,6 +9,7 @@ REMOTEPATH=/opt/doc/api
 
 HERE=$(cd $(dirname $0); pwd -P)
 TLDJAR=$HERE/tlddoc-1.3.jar
+SIMPLIFYJAVADOC=$HERE/simplifyjavadoc.py
 
 BRANCH=${1:-5.5}
 VERSION=${2:-$BRANCH}
@@ -56,8 +57,14 @@ build_javadoc() {
     cd "$1"
     mvn javadoc:aggregate -Pjavadoc,addons,distrib || return 1
     [ ! -d "$DOCTMP" ] && return
+    build_simplified_javadoc "$DOCTMP"
     keep_old_javadoc "$DOCDST" "$DOCTMP"
     swap_doc "$DOCDST" "$DOCTMP"
+}
+
+build_simplified_javadoc() {
+    cd "$1"
+    find . -name '*.html' -exec "$SIMPLIFYJAVADOC" '{}' +
 }
 
 push_doc() {
