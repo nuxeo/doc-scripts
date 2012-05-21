@@ -21,6 +21,7 @@ LOCAL_REPO="$SRC/nuxeo-$VERSION"
 LOCAL_DOC="$SRC/nuxeo-$VERSION-javadoc"
 LOCAL_TLDDOC="$SRC/nuxeo-$VERSION-tlddoc"
 
+umask 022
 
 clone() {
 
@@ -112,7 +113,6 @@ update() {
     fi
     echo "######## nuxeo-$VERSION end"
 }
-
 
 update
 
