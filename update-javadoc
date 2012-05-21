@@ -15,7 +15,7 @@ BRANCH=${1:-5.5}
 VERSION=${2:-$BRANCH}
 SRC=$HERE/src
 [ -d "$SRC" ] || mkdir -p "$SRC"
-SCM_REPO=http://hg.nuxeo.org/nuxeo
+SCM_REPO=git://github.com/nuxeo/nuxeo.git
 
 LOCAL_REPO="$SRC/nuxeo-$VERSION"
 LOCAL_DOC="$SRC/nuxeo-$VERSION-javadoc"
@@ -23,12 +23,12 @@ LOCAL_TLDDOC="$SRC/nuxeo-$VERSION-tlddoc"
 
 
 clone() {
-    
+
     if [ ! -d "$LOCAL_REPO" ]; then
         echo "##### Cloning nuxeo: $SCM_REPO into $LOCAL_REPO ..."
-        hg clone $SCM_REPO "$LOCAL_REPO" || exit 1
+        git clone $SCM_REPO "$LOCAL_REPO" || exit 1
     fi
-    (cd "$LOCAL_REPO" && hg up $BRANCH)
+    (cd "$LOCAL_REPO" && git checkout $BRANCH)
     (cd "$LOCAL_REPO" && python clone.py)
 
 }
