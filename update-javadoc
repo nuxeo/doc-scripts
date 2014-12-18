@@ -4,7 +4,7 @@
 #  SYNC_ONLY to only sync
 #  NO_SYNC to not do the sync
 
-REMOTEHOST=doc@styx.nuxeo.com
+REMOTEHOST=nuxeo@lethe.nuxeo.com
 REMOTEPATH=/opt/doc/api
 
 HERE=$(cd $(dirname $0); pwd -P)
