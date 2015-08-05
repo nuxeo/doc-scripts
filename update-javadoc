@@ -94,7 +94,7 @@ build_tlddoc() {
     [ ! -e $TLDJAR ] && wget --no-check-certificate -O$TLDJAR "https://maven.nuxeo.org/nexus/service/local/artifact/maven/redirect?r=central&g=org.omnifaces&a=vdldoc&v=2.0&e=jar"
     cd "$1"
     # filter deprecated themes taglib, as well as error-web module "test" taglib
-    find . -name "*.taglib.xml" | grep -v target | grep -v bin | grep -v "nxthemes.taglib.xml" | grep -v "error.taglib.xml" | xargs java -jar $TLDJAR -d $DOCTMP -windowtitle $DOCTITLE -doctitle $DOCTITLE
+    find . -name "*.taglib.xml" | grep -v target | grep -v bin | grep -v "nxthemes.taglib.xml" | grep -v "error.taglib.xml" | xargs java -jar $TLDJAR -d $DOCTMP -windowtitle "$DOCTITLE" -doctitle "$DOCTITLE"
     [ ! -d "$DOCTMP" ] && return
     keep_old_doc "$DOCDST" "$DOCTMP"
     swap_doc "$DOCDST" "$DOCTMP"
