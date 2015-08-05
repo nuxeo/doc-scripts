@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Env vars:
 #  SYNC_ONLY to only sync
 #  NO_SYNC to not do the sync
