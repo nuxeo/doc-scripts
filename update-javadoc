@@ -115,5 +115,4 @@ update() {
     echo "######## nuxeo-$VERSION end"
 }
 
-#update
-
+update
