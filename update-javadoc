@@ -18,6 +18,7 @@ VERSION=${2:-$BRANCH}
 SRC=$HERE/src
 [ -d "$SRC" ] || mkdir -p "$SRC"
 SCM_REPO=git://github.com/nuxeo/nuxeo.git
+MVN_PROFILES=${3}
 
 LOCAL_REPO="$SRC/nuxeo-$VERSION"
 LOCAL_DOC="$SRC/nuxeo-$VERSION-javadoc"
@@ -58,7 +59,7 @@ build_javadoc() {
     DOCTMP="$1"/target/site/apidocs
     DOCDST="$2"
     cd "$1"
-    mvn javadoc:aggregate -Pjavadoc,addons,distrib,-qa || exit 1
+    mvn javadoc:aggregate -Pjavadoc,addons,distrib $MVN_PROFILES || exit 1
     [ ! -d "$DOCTMP" ] && return
     build_simplified_javadoc "$DOCTMP"
     keep_old_javadoc "$DOCDST" "$DOCTMP"
