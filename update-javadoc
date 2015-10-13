@@ -95,16 +95,18 @@ build_tlddoc() {
     DOCTMP="$1"/target/site/tlddoc
     DOCDST="$2"
 
-    if [ "$BRANCH" \< "7.4" ]; then
-	[ ! -e $TLDJAR ] && wget --no-check-certificate -O$TLDJAR "https://maven.nuxeo.org/nexus/service/local/artifact/maven/redirect?r=central&g=taglibrarydoc&a=tlddoc&v=1.3&e=jar"
-	cd "$1"
-	find . -name "*.tld" |grep -v target | xargs java -jar $TLDJAR -d $DOCTMP
+    VER=${VERSION#release-}
+    VER=`printf "%03d%03d%03d" $(echo "$VER" | tr '.' ' ')`
+    if [ $VER -lt 007004000 ]; then
+      [ ! -e $TLDJAR ] && wget --no-check-certificate -O$TLDJAR "https://maven.nuxeo.org/nexus/service/local/artifact/maven/redirect?r=central&g=taglibrarydoc&a=tlddoc&v=1.3&e=jar"
+      cd "$1"
+      find . -name "*.tld" |grep -v target | xargs java -jar $TLDJAR -d $DOCTMP
     else
-	DOCTITLE="Nuxeo VDL Generated Documentation"
-	[ ! -e $VDLJAR ] && wget --no-check-certificate -O$VDLJAR "https://maven.nuxeo.org/nexus/service/local/artifact/maven/redirect?r=central&g=org.omnifaces&a=vdldoc&v=2.0&e=jar"    
-	cd "$1"
-        # filter deprecated themes taglib, as well as error-web module "test" taglib
-	find . -name "*.taglib.xml" | grep -v target | grep -v bin | grep -v "nxthemes.taglib.xml" | grep -v "error.taglib.xml" | xargs java -jar $VDLJAR -d $DOCTMP -windowtitle "$DOCTITLE" -doctitle "$DOCTITLE"
+      DOCTITLE="Nuxeo VDL Generated Documentation"
+      [ ! -e $VDLJAR ] && wget --no-check-certificate -O$VDLJAR "https://maven.nuxeo.org/nexus/service/local/artifact/maven/redirect?r=central&g=org.omnifaces&a=vdldoc&v=2.0&e=jar"
+      cd "$1"
+      # filter deprecated themes taglib, as well as error-web module "test" taglib
+      find . -name "*.taglib.xml" | grep -v target | grep -v bin | grep -v "nxthemes.taglib.xml" | grep -v "error.taglib.xml" | xargs java -jar $VDLJAR -d $DOCTMP -windowtitle "$DOCTITLE" -doctitle "$DOCTITLE"
     fi
 
     [ ! -d "$DOCTMP" ] && return
