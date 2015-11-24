@@ -32,6 +32,8 @@ clone() {
     if [ ! -d "$LOCAL_REPO" ]; then
         echo "##### Cloning nuxeo: $SCM_REPO into $LOCAL_REPO ..."
         git clone $SCM_REPO "$LOCAL_REPO" || exit 1
+    else
+        (cd "$LOCAL_REPO" && git fetch) || exit 1
     fi
     (cd "$LOCAL_REPO" && git checkout $BRANCH) || exit 1
     (cd "$LOCAL_REPO" && python clone.py) || exit 1
