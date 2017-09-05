@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # Env vars:
 #  SYNC_ONLY to only sync
@@ -78,9 +78,9 @@ push_doc() {
     [ -z "$1" ] && return
     [ -z "$2" ] && return
     [ -n "$NO_SYNC" ] && return
-    echo "##### running rsync in background"
+    echo "##### running rsync"
     ssh $REMOTEHOST mkdir -p $REMOTEPATH/$2
-    rsync -z -e ssh -r --delete "$1"/* $REMOTEHOST:$REMOTEPATH/$2 &
+    rsync -z -e ssh -r --delete "$1"/* $REMOTEHOST:$REMOTEPATH/$2 
 }
 
 keep_old_doc() {
